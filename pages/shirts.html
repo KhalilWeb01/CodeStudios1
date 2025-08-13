@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shirts | Code Studios</title>
+  <link rel="stylesheet" href="../style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* Cart Badge */
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #e74c3c;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 0;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.2em;
+      font-weight: 600;
+    }
+
+    .close {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #000;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .cart-item-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-right: 15px;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .cart-item-price {
+      color: #d33;
+      font-weight: 600;
+    }
+
+    .cart-item-quantity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .quantity-btn {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+
+    .quantity-btn:hover {
+      background: #e9ecef;
+    }
+
+    .cart-summary {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid #eee;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .summary-item.total {
+      font-weight: 600;
+      font-size: 1.1em;
+      color: #d33;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: #4a90e2;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #357abd;
+    }
+
+    .btn-large {
+      width: 100%;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4a90e2;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1001;
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background: #28a745;
+    }
+
+    .notification.error {
+      background: #dc3545;
+    }
+
+    .notification.warning {
+      background: #ffc107;
+      color: #212529;
+    }
+
+    /* Dark theme modal */
+    .dark-theme .modal-content {
+      background-color: #2d2d2d;
+      color: #ffffff;
+    }
+
+    .dark-theme .modal-header {
+      border-bottom: 1px solid #3d3d3d;
+    }
+
+    .dark-theme .cart-item {
+      border-bottom: 1px solid #3d3d3d;
+    }
+
+    .dark-theme .cart-summary {
+      border-top: 2px solid #3d3d3d;
+    }
+
+    .dark-theme .quantity-btn {
+      background: #3d3d3d;
+      border: 1px solid #4d4d4d;
+      color: #ffffff;
+    }
+
+    .dark-theme .quantity-btn:hover {
+      background: #4d4d4d;
+    }
+  </style>
+  <style>
+    .category-section {
+      padding: 2em 1em 1em 1em;
+      text-align: center;
+    }
+    .product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+      margin-top: 1.5em;
+      align-items: center;
+    }
+    .product-card {
+      background: #f0f0f0;
+      border-radius: 12px;
+      padding: 1em 1em 1.2em 1em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90vw;
+      max-width: 340px;
+      transition: box-shadow 0.2s;
+    }
+    .product-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    }
+    .product-card img {
+      width: 100%;
+      max-width: 260px;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 0.8em;
+      object-fit: cover;
+    }
+    .product-card span {
+      font-size: 1.1em;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    @media (min-width: 600px) and (max-width: 999px) {
+      .product-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2em 2em;
+      }
+      .product-card {
+        width: 260px;
+        max-width: 260px;
+      }
+    }
+    @media (min-width: 1000px) {
+      .product-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2.5em 2.5em;
+      }
+      .product-card {
+        width: 260px;
+        max-width: 260px;
+      }
+    }
+    @media (max-width: 400px) {
+      .product-card {
+        padding: 0.7em 0.5em 1em 0.5em;
+      }
+      .product-card img {
+        max-width: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+     <nav class="navbar-flex">
+            <button class="menu-btn" id="openSidebar" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+            <!-- Mobile centered logo -->
+            <a href="index.html" class="mobile-logo" aria-label="Home">
+              <span class="logo-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 64 64">
+                  <path class="logo-arc-top" d="M 14 29 a 20 20 0 1 1 40 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="butt" />
+                  <path class="logo-arc-bottom" d="M 14 35 a 20.5 21 0 0 0  40 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="butt" />
+                  <line class="logo-vert" x1="32" y1="12" x2="32" y2="52" stroke="#fff" stroke-width="6" stroke-linecap="butt" />
+                  <line class="logo-horiz" x1="32" y1="32" x2="52" y2="32" stroke="#fff" stroke-width="6" stroke-linecap="butt" />
+                </svg>
+              </span>
+              <span class="mobile-brand-text">Code Studios</span>
+            </a>
+
+            <!-- Brand logo + name (desktop like in pages/tshirts.html) -->
+            <div class="brand-logo-wrap brand-logo-main" onclick="location.href='index.html'" style="cursor:pointer;">
+              <div class="logo">
+                <div class="logo-icon">
+                  <svg width="64" height="64" viewBox="0 0 64 64">
+                    <path class="logo-arc-top" d="M 14 29 a 20 20 0 1 1 40 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="butt" />
+                    <path class="logo-arc-bottom" d="M 14 35 a 20.5 21 0 0 0  40 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="butt" />
+                    <line class="logo-vert" x1="32" y1="12" x2="32" y2="52" stroke="#fff" stroke-width="6" stroke-linecap="butt" />
+                    <line class="logo-horiz" x1="32" y1="32" x2="52" y2="32" stroke="#fff" stroke-width="6" stroke-linecap="butt" />
+                  </svg>
+                </div>
+              </div>
+              <span class="brand-name">Code Studios</span>
+            </div>
+
+            <!-- Desktop Navigation Menu -->
+            <nav class="desktop-nav">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="nav-dropdown">
+                        <button class="nav-dropdown-btn" id="categoriesDropdown">
+                            Categories
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="nav-dropdown-content" id="categoriesDropdownContent">
+                            <a href="pages/tshirts.html">T-shirts</a>
+                            <a href="pages/shirts.html">Shirts</a>
+                            <a href="pages/trousers.html">Trousers</a>
+                            <a href="pages/shorts.html">Shorts</a>
+                            <a href="pages/shoes.html">Shoes</a>
+                        </div>
+                    </li>
+                    <li><a href="dashboard/dash.html">Dashboard</a></li>
+                    <li><a href="#" onclick="showCart()">Cart</a></li>
+                    <li><a href="pages/profile.html">Profile</a></li>
+                    <li>
+                        <button id="desktopThemeToggle" class="theme-toggle-btn">
+                            🌙 Dark Mode
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="search-box-wrap" style="position:relative;display:inline-block;">
+              <button class="search-btn" aria-label="Search">
+                <svg class="search-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="18" y1="18" x2="15.5" y2="15.5" />
+                </svg>
+              </button>
+              <input type="text" class="search-input-box" id="searchInputBox" placeholder="Search products..." style="display:none;">
+              <div class="search-suggestions" id="searchSuggestions" style="display:none;"></div>
+            </div>
+        </nav>
+  </header>
+  <main>
+    <section class="category-section">
+      <h2>Shirts</h2>
+      <div class="product-list" id="shirtProductList"></div>
+    </section>
+  </main>
+  <!-- Sidebar для работы кнопки меню -->
+  <aside class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeSidebar" aria-label="Close menu">&times;</button>
+    <ul class="sidebar-links">
+      <li><a href="../index.html">Home</a></li>
+      <li class="sidebar-dropdown">
+        <button class="sidebar-dropdown-btn" id="sidebarCategoriesDropdown">
+          Categories
+          <span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="sidebar-dropdown-content" id="sidebarCategoriesDropdownContent">
+          <a href="tshirts.html">T-shirts</a>
+          <a href="shirts.html">Shirts</a>
+          <a href="trousers.html">Trousers</a>
+          <a href="shorts.html">Shorts</a>
+          <a href="shoes.html">Shoes</a>
+        </div>
+      </li>
+      <li><a href="../dashboard/dash.html">Dashboard</a></li>
+      <li><a href="#" onclick="showCart()">Cart</a></li>
+      <li><a href="profile.html">Me</a></li>
+      <li class="theme-toggle">
+        <button id="themeToggle" style="background:none;border:none;color:inherit;font-size:1.2em;padding:0.5em 1em;display:block;width:100%;text-align:left;cursor:pointer;">
+          🌙 Dark Mode
+        </button>
+      </li>
+    </ul>
+  </aside>
+  <footer>
+    <section class="subscribe">
+      <h3>Join our mailing list</h3>
+      <form>
+        <input type="email" placeholder="Your Email" required>
+        <button type="submit">Subscribe</button>
+      </form>
+      <p class="terms">By continuing, you agree to our <a href="#">Terms Of Use</a> and <a href="#">Privacy & Cookie Policy</a>.</p>
+    </section>
+    <ul class="footer-links">
+      <li><a href="#">Shipping Info</a></li>
+      <li><a href="#">Terms & Conditions</a></li>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Return Policy</a></li>
+      <li><a href="#">Contact Us</a></li>
+    </ul>
+    <p>© 2025 Code Studios - ALL RIGHTS RESERVED</p>
+  </footer>
+  <script src="../script.js"></script>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  function getProducts() {
+    const data = localStorage.getItem('products');
+    if (!data) return [];
+    return JSON.parse(data);
+  }
+  function calcDiscount(price, oldPrice) {
+    if (!oldPrice || !price) return null;
+    return Math.round(100 - (price / oldPrice) * 100);
+  }
+  function renderShirtProducts() {
+    const list = document.getElementById('shirtProductList');
+    if (!list) return;
+    const products = getProducts().filter(p => p.category === 'shirt');
+    if (products.length === 0) {
+      list.innerHTML = '<div style="padding:2em;">No Shirts found.</div>';
+      return;
+    }
+    list.innerHTML = products.map((product, index) => {
+      const discount = (product.oldPrice && product.price) ? calcDiscount(product.price, product.oldPrice) : null;
+      const animationClass = `scroll-animate from-bottom stagger-${(index % 5) + 1}`;
+      const photo = (product.photos && product.photos[0]) ? product.photos[0] : '';
+      return `
+        <div class="product-card ${animationClass}" data-product-id="${product.id}" onclick="window.location.href='../product.html?id=${product.id}'" style="position:relative;cursor:pointer;max-width:320px;margin:0 auto 2em auto;">
+          <div class="product-card-cart" onclick="event.stopPropagation(); addToCart('${product.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          </div>
+          <div class="product-image-wrap">
+            ${discount ? `<div class='product-discount'>-${discount}%</div>` : ''}
+            ${photo ? `<img src='${photo}' alt='${product.name}'>` : ''}
+            <button class="product-fav" aria-label="Add to favorites" onclick="event.stopPropagation(); addToFavorites('${product.id}')">&#9825;</button>
+          </div>
+          <div class="product-card-title" title="${product.name}">${product.name}</div>
+          <div class="product-card-row">
+            <span class="product-card-price" style="${discount ? 'color:#e74c3c' : ''}">${product.price} AED</span>
+            ${product.oldPrice ? `<span class="product-card-oldprice">${product.oldPrice} AED</span>` : ''}
+          </div>
+          <div class="product-card-row">
+            <span class="product-card-rating"><span class="star">★</span> ${product.rating ? product.rating : '4.8'}</span>
+          </div>
+          <div class="product-card-colors">
+            ${(product.colors||[]).map(c=>`<span class='product-card-color' style='background:${typeof c==='string'?c:(c.hex||c)}'></span>`).join('')}
+          </div>
+          <div class="product-meta"><span class="product-qty">Stock: ${product.quantity}</span></div>
+        </div>`;
+    }).join('');
+  }
+  renderShirtProducts();
+
+  // Cart and Favorites functionality
+  let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+  function updateCartBadge() {
+    const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const cartBadge = document.getElementById('cartBadge');
+    if (cartBadge) {
+      cartBadge.textContent = cartCount;
+    }
+  }
+
+  function addToCart(productId) {
+    const products = getProducts();
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    const existingItem = cart.find(item => item.id === productId);
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({
+        id: productId,
+        name: product.name,
+        price: product.price,
+        image: product.photos ? product.photos[0] : '',
+        quantity: 1
+      });
+    }
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartBadge();
+    showNotification('Товар добавлен в корзину', 'success');
+  }
+
+  function addToFavorites(productId) {
+    const products = getProducts();
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    const existingItem = favorites.find(item => item.id === productId);
+    if (!existingItem) {
+      favorites.push({
+        id: productId,
+        name: product.name,
+        price: product.price,
+        image: product.photos ? product.photos[0] : ''
+      });
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+      showNotification('Товар добавлен в избранное', 'success');
+    } else {
+      showNotification('Товар уже в избранном', 'warning');
+    }
+  }
+
+  function showCart() {
+    const modal = document.getElementById('cartModal');
+    const cartItems = document.getElementById('cartItems');
+    const totalItems = document.getElementById('totalItems');
+    const totalPrice = document.getElementById('totalPrice');
+
+    if (cart.length === 0) {
+      cartItems.innerHTML = '<p style="text-align: center; padding: 20px;">Корзина пуста</p>';
+    } else {
+      cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${item.price} AED</div>
+            <div class="cart-item-quantity">
+              <button class="quantity-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
+              <span>${item.quantity}</span>
+              <button class="quantity-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    totalItems.textContent = totalCount;
+    totalPrice.textContent = totalAmount.toFixed(2) + ' AED';
+    modal.style.display = 'block';
+  }
+
+  function closeCart() {
+    const modal = document.getElementById('cartModal');
+    modal.style.display = 'none';
+  }
+
+  function updateQuantity(productId, change) {
+    const item = cart.find(item => item.id === productId);
+    if (item) {
+      item.quantity += change;
+      if (item.quantity <= 0) {
+        cart = cart.filter(item => item.id !== productId);
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartBadge();
+      showCart(); // Refresh cart display
+    }
+  }
+
+  function checkout() {
+    showNotification('Функция оформления заказа в разработке', 'info');
+    closeCart();
+  }
+
+  function showNotification(message, type = 'info') {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.className = `notification ${type}`;
+    notification.classList.add('show');
+    
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 3000);
+  }
+
+  // Add event listeners for cart and favorites buttons
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('product-cart')) {
+      const productCard = e.target.closest('.product-card');
+      if (productCard) {
+        const productId = productCard.getAttribute('data-product-id');
+        if (productId) {
+          addToCart(productId);
+        }
+      }
+    }
+    
+    if (e.target.classList.contains('product-fav')) {
+      const productCard = e.target.closest('.product-card');
+      if (productCard) {
+        const productId = productCard.getAttribute('data-product-id');
+        if (productId) {
+          addToFavorites(productId);
+        }
+      }
+    }
+  });
+
+  // Close modal when clicking outside
+  window.onclick = function(event) {
+    const modal = document.getElementById('cartModal');
+    if (event.target === modal) {
+      closeCart();
+    }
+  }
+
+  // Initialize cart badge
+  updateCartBadge();
+
+  // Initialize scroll animations
+  function initializeScrollAnimations() {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, observerOptions);
+
+    // Add animation classes to elements
+    const categoryTitle = document.querySelector('.category-section h2');
+    if (categoryTitle) {
+      categoryTitle.classList.add('scroll-animate', 'from-left');
+      observer.observe(categoryTitle);
+    }
+
+    const productCards = document.querySelectorAll('.product-card');
+    productCards.forEach(card => {
+      observer.observe(card);
+    });
+
+    const footerSections = document.querySelectorAll('.subscribe, .footer-links');
+    footerSections.forEach((section, index) => {
+      section.classList.add('scroll-animate', 'from-bottom');
+      section.classList.add(`stagger-${index + 1}`);
+      observer.observe(section);
+    });
+  }
+
+  // Initialize animations after content is rendered
+  setTimeout(initializeScrollAnimations, 100);
+
+  // Theme toggle functionality
+  const themeToggle = document.getElementById('themeToggle');
+  const body = document.body;
+  
+  function getTheme() {
+    return localStorage.getItem('theme') || 'light';
+  }
+  
+  function setTheme(theme) {
+    localStorage.setItem('theme', theme);
+    if (theme === 'dark') {
+      body.classList.add('dark-theme');
+      themeToggle.innerHTML = '☀️ Light Mode';
+    } else {
+      body.classList.remove('dark-theme');
+      themeToggle.innerHTML = '🌙 Dark Mode';
+    }
+  }
+  
+  // Initialize theme
+  setTheme(getTheme());
+  
+  // Theme toggle event
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+      const currentTheme = getTheme();
+      setTheme(currentTheme === 'light' ? 'dark' : 'light');
+    });
+  }
+  // Expose for inline handlers
+  window.addToCart = addToCart;
+  window.addToFavorites = addToFavorites;
+});
+
+// Global functions for cart modal
+function showCart() {
+  window.showCart();
+}
+
+function closeCart() {
+  window.closeCart();
+}
+
+function updateQuantity(productId, change) {
+  window.updateQuantity(productId, change);
+}
+
+function checkout() {
+  window.checkout();
+}
+</script>
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="../index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 3l9 9"/><path d="M9 21V9h6v12"/></svg>
+            </span>
+            <span class="bottom-nav-label">Home</span>
+        </a>
+        <a href="#" class="bottom-nav-item" onclick="showCart()">
+            <span class="bottom-nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </span>
+            <span class="bottom-nav-label">Cart</span>
+            <span class="cart-badge" id="cartBadge">0</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v2"/></svg>
+            </span>
+            <span class="bottom-nav-label">Me</span>
+        </a>
+    </nav>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Корзина</h3>
+                <span class="close" onclick="closeCart()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="cartItems"></div>
+                <div class="cart-summary">
+                    <div class="summary-item">
+                        <span>Товаров:</span>
+                        <span id="totalItems">0</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Итого:</span>
+                        <span id="totalPrice">0 AED</span>
+                    </div>
+                    <button class="btn btn-primary btn-large" onclick="checkout()">
+                        <i class="fas fa-credit-card"></i>
+                        Оформить заказ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+</body>
+
+</html> 

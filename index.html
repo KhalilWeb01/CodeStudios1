@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Studio</title>
+  <link rel="icon" type="image/png" href="resourse/Img/Logo.png" />
+  <link rel="stylesheet" href="style.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Banner Styles (moved general UI to CSS file; keep only home-specific overrides if needed) */
+    .main-banner {
+      position: relative;
+      height: 500px;
+      /* Adjust as needed */
+      overflow: hidden;
+      margin-bottom: 40px;
+      /* Space below the banner */
+    }
+
+    .banner-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.6);
+      /* Darken the image */
+    }
+
+    .banner-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      /* Semi-transparent overlay */
+    }
+
+    .banner-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      z-index: 10;
+    }
+
+    /* .banner-lo go placeholder removed */
+
+    .banner-title {
+      font-size: 3.5em;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .banner-x {
+      font-size: 1.5em;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .banner-subtitle {
+      font-size: 1.8em;
+      font-weight: 600;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Desktop Banner Enhancements */
+    @media (min-width: 1000px) {
+      .main-banner {
+        height: 600px;
+        margin-bottom: 60px;
+      }
+
+      .banner-title {
+        font-size: 4.5em;
+      }
+
+      .banner-subtitle {
+        font-size: 2.2em;
+      }
+    }
+
+    /* Category horizontal scroll styles (home only) */
+    .category-list {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 24px;
+      padding-bottom: 10px;
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* IE 10+ */
+    }
+
+    .category-list::-webkit-scrollbar {
+      display: none;
+      /* Chrome/Safari */
+    }
+
+    .category-card {
+      min-width: 180px;
+      max-width: 200px;
+      flex: 0 0 auto;
+      padding: 0;
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+      background: none;
+    }
+
+    .category-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .category-card span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 1.3em;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.25);
+      letter-spacing: 1px;
+      pointer-events: none;
+      text-align: center;
+      width: 90%;
+    }
+
+    /* Second banner styles */
+    .second-banner {
+      margin-top: 32px;
+    }
+
+    .banner-content-center {
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+    }
+
+    .banner-text-small {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1.1em;
+      font-weight: 400;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+      letter-spacing: 1px;
+    }
+
+    .banner-text-large {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 2.2em;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 40px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+      letter-spacing: 2px;
+    }
+
+    .banner-text-shop {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1.1em;
+      font-weight: 400;
+      color: #fff;
+      text-align: center;
+      margin-top: 60px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+      letter-spacing: 1px;
+      border-bottom: 1.5px solid #fff;
+      display: inline-block;
+      padding-bottom: 2px;
+      cursor: pointer;
+    }
+
+    /* Products carousel styles (home only) */
+    .products-carousel-section {
+      margin: 48px 0 0 0;
+    }
+
+    .products-carousel-title {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1.5em;
+      font-weight: 700;
+      margin-bottom: 18px;
+      margin-left: 12px;
+    }
+
+    /* Products carousel tabs */
+    .products-carousel-tabs {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 10px;
+      margin-left: 12px;
+      align-items: flex-end;
+    }
+
+    .carousel-tab {
+      background: none;
+      border: none;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #222;
+      padding: 0 0 6px 0;
+      cursor: pointer;
+      border-bottom: 2.5px solid transparent;
+      transition: border 0.2s, color 0.2s;
+    }
+
+    .carousel-tab.active {
+      color: #111;
+      border-bottom: 2.5px solid #111;
+    }
+
+    .products-carousel-footer {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .view-more-btn {
+      background: #fff;
+      border: 1.5px solid #222;
+      border-radius: 6px;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1em;
+      font-weight: 500;
+      padding: 8px 28px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .view-more-btn:hover {
+      background: #f5f5f5;
+    }
+
+    .products-carousel {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      gap: 24px;
+      padding: 10px 0 20px 10px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .products-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Desktop Product Grid */
+    @media (min-width: 1000px) {
+      .products-carousel {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        overflow-x: visible;
+        padding: 20px 0 40px 0;
+      }
+
+      .product-card {
+        min-width: auto;
+        max-width: none;
+        padding: 0 0 20px 0;
+      }
+
+      .category-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        justify-items: center;
+      }
+
+      .category-card {
+        width: 100%;
+        max-width: 350px;
+      }
+
+      .categories {
+        padding: 3em 0 2em 0;
+      }
+
+      .products-carousel-section {
+        margin: 60px 0 0 0;
+      }
+    }
+
+    .product-card {
+      min-width: 210px;
+      max-width: 220px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 0 16px 0;
+      position: relative;
+      transition: box-shadow 0.2s;
+      border: 1.5px solid #f2f2f2;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 16px 16px 0 0;
+      margin-bottom: 0;
+    }
+
+    .product-card-title {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 1.05em;
+      margin: 12px 10px 4px 10px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 90%;
+    }
+
+    .product-card-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .product-card-price {
+      color: #222;
+      font-weight: 700;
+      font-size: 1.08em;
+    }
+
+    .product-card-oldprice {
+      color: #888;
+      font-size: 0.98em;
+      text-decoration: line-through;
+      margin-left: 4px;
+    }
+
+    .product-card-discount {
+      color: #e74c3c;
+      background: #fff0f0;
+      font-size: 0.95em;
+      font-weight: 700;
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-right: 4px;
+      margin-bottom: 2px;
+    }
+
+    .product-card-rating {
+      display: flex;
+      align-items: center;
+      font-size: 0.98em;
+      color: #222;
+      gap: 2px;
+    }
+
+    .product-card-rating .star {
+      color: #f5b301;
+      font-size: 1.1em;
+    }
+
+    .product-card-colors {
+      display: flex;
+      gap: 7px;
+      margin: 8px 0 0 0;
+      justify-content: center;
+    }
+
+    .product-card-color {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid #eee;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .product-card-cart {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #fff;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+      cursor: pointer;
+      border: 1.5px solid #f2f2f2;
+      transition: background 0.2s;
+    }
+
+    .product-card-cart:hover {
+      background: #f5f5f5;
+    }
+
+    .product-card-cart svg {
+      width: 22px;
+      height: 22px;
+      color: #222;
+    }
+
+    /* Bottom nav modern style */
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #fff;
+      border-top: 1.5px solid #eee;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 58px;
+      z-index: 1002;
+      box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .bottom-nav-link {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #222;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1em;
+      font-weight: 500;
+      padding: 0 2px;
+      transition: color 0.18s;
+      position: relative;
+    }
+
+    .bottom-nav-link:active,
+    .bottom-nav-link:focus {
+      color: #4a90e2;
+    }
+
+    .bottom-nav-icon {
+      font-size: 1.45em;
+      margin-bottom: 2px;
+      display: block;
+      position: relative;
+    }
+
+    .bottom-nav-label {
+      font-size: 1em;
+      font-family: 'Montserrat', Arial, sans-serif;
+      margin-top: 2px;
+      letter-spacing: 0.2px;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      background: #e74c3c;
+      color: #fff;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      z-index: 1;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.10);
+    }
+  </style>
+</head>
+
+<body class="home">
+  <header>
+    <nav class="navbar-flex">
+      <button class="menu-btn" id="openSidebar" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <!-- Mobile centered logo -->
+      <a href="index.html" class="mobile-logo" aria-label="Home">
+        <span class="logo-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 64 64">
+            <path class="logo-arc-top" d="M 14 29 a 20 20 0 1 1 40 0" stroke="#fff" stroke-width="6" fill="none"
+              stroke-linecap="butt" />
+            <path class="logo-arc-bottom" d="M 14 35 a 20.5 21 0 0 0  40 0" stroke="#fff" stroke-width="6" fill="none"
+              stroke-linecap="butt" />
+            <line class="logo-vert" x1="32" y1="12" x2="32" y2="52" stroke="#fff" stroke-width="6"
+              stroke-linecap="butt" />
+            <line class="logo-horiz" x1="32" y1="32" x2="52" y2="32" stroke="#fff" stroke-width="6"
+              stroke-linecap="butt" />
+          </svg>
+        </span>
+        <span class="mobile-brand-text">Codes Studios</span>
+      </a>
+
+      <!-- Brand logo + name (desktop like in pages/tshirts.html) -->
+      <div class="brand-logo-wrap brand-logo-main" onclick="location.href='index.html'" style="cursor:pointer;">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg width="64" height="64" viewBox="0 0 64 64">
+              <path class="logo-arc-top" d="M 14 29 a 20 20 0 1 1 40 0" stroke="#fff" stroke-width="6" fill="none"
+                stroke-linecap="butt" />
+              <path class="logo-arc-bottom" d="M 14 35 a 20.5 21 0 0 0  40 0" stroke="#fff" stroke-width="6" fill="none"
+                stroke-linecap="butt" />
+              <line class="logo-vert" x1="32" y1="12" x2="32" y2="52" stroke="#fff" stroke-width="6"
+                stroke-linecap="butt" />
+              <line class="logo-horiz" x1="32" y1="32" x2="52" y2="32" stroke="#fff" stroke-width="6"
+                stroke-linecap="butt" />
+            </svg>
+          </div>
+        </div>
+        <span class="brand-name">Code Studios</span>
+      </div>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="desktop-nav">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li class="nav-dropdown">
+        <button class="nav-dropdown-btn" id="categoriesDropdown" type="button" aria-expanded="false">
+          Categories
+          <span class="dropdown-arrow">▼</span>
+        </button>
+            <div class="nav-dropdown-content" id="categoriesDropdownContent">
+              <a href="pages/tshirts.html">T-shirts</a>
+              <a href="pages/shirts.html">Shirts</a>
+              <a href="pages/trousers.html">Trousers</a>
+              <a href="pages/shorts.html">Shorts</a>
+              <a href="pages/shoes.html">Shoes</a>
+            </div>
+          </li>
+           <!-- Dashboard hidden from public nav -->
+          <li><a href="#" onclick="showCart()">Cart</a></li>
+          <li><a href="pages/profile.html">Profile</a></li>
+          <li>
+            <button id="desktopThemeToggle" class="theme-toggle-btn">
+              🌙 Dark Mode
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="search-box-wrap" style="position:relative;display:inline-block;">
+        <button class="search-btn" id="desktopSearchToggle" aria-label="Search">
+          <svg class="search-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222"
+            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7" />
+            <line x1="18" y1="18" x2="15.5" y2="15.5" />
+          </svg>
+        </button>
+        <input type="text" class="search-input-box" id="searchInputBox" placeholder="Search products..."
+          style="display:none;">
+        <div class="search-suggestions" id="searchSuggestions" style="display:none;"></div>
+      </div>
+    </nav>
+  </header>
+  <!-- Sidebar для работы кнопки меню -->
+  <aside class="sidebar" id="sidebar">
+    <button class="close-btn" id="closeSidebar" aria-label="Close menu">&times;</button>
+    <ul class="sidebar-links">
+      <li><a href="index.html">Home</a></li>
+      <li class="sidebar-dropdown">
+        <button class="sidebar-dropdown-btn" id="sidebarCategoriesDropdown">
+          Categories
+          <span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="sidebar-dropdown-content" id="sidebarCategoriesDropdownContent">
+          <a href="pages/tshirts.html">T-shirts</a>
+          <a href="pages/shirts.html">Shirts</a>
+          <a href="pages/trousers.html">Trousers</a>
+          <a href="pages/shorts.html">Shorts</a>
+          <a href="pages/shoes.html">Shoes</a>
+        </div>
+      </li>
+      <!-- Dashboard hidden from sidebar nav -->
+      <li><a href="#" onclick="showCart()">Cart</a></li>
+      <li><a href="pages/profile.html">Profile</a></li>
+      <li class="theme-toggle">
+        <button id="themeToggle"
+          style="background:none;border:none;color:inherit;font-size:1.2em;padding:0.5em 1em;display:block;width:100%;text-align:left;cursor:pointer;">
+          🌙 Dark Mode
+        </button>
+      </li>
+    </ul>
+  </aside>
+  <main>
+    <div class="main-banner">
+      <img src="resourse/Img/mens-hero-dt-data.jpg" alt="Brand Banner" class="banner-img">
+      <div class="banner-overlay"></div>
+      <div class="banner-content">
+        <div class="banner-logo">
+          <!-- Можно вставить SVG логотипа, если нужен -->
+        </div>
+        <h1 class="banner-title">CODE</h1>
+        <h2 class="banner-subtitle">STUDIOS</h2>
+      </div>
+    </div>
+
+    <div class="main-container">
+      <section class="categories">
+        <h2 class="scroll-animate from-left">SHOP BY CATEGORY</h2>
+        <div class="category-list">
+          <a class="category-card scroll-animate from-bottom stagger-1" href="pages/tshirts.html">
+            <img src="resourse/Img/tops-t-shirts-data.jpg" alt="T-shirts">
+            <span>T-shirts</span>
+          </a>
+          <a class="category-card scroll-animate from-bottom stagger-2" href="pages/shirts.html">
+            <img src="resourse/Img/shirts-data.jpg" alt="Shirts">
+            <span>Shirts</span>
+          </a>
+          <a class="category-card scroll-animate from-bottom stagger-3" href="pages/trousers.html">
+            <img src="resourse/Img/trousers-chinos-data.jpg" alt="Trousers">
+            <span>Trousers</span>
+          </a>
+          <a class="category-card scroll-animate from-bottom stagger-4" href="pages/shorts.html">
+            <img src="resourse/Img/short.webp" alt="Shorts">
+            <span>Shorts</span>
+          </a>
+          <a class="category-card scroll-animate from-bottom stagger-5" href="pages/shoes.html">
+            <img src="resourse/Img/716979.webp" alt="Shoes">
+            <span>Shoes</span>
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div class="main-banner second-banner">
+      <img src="resourse/Img/hoodies-sweatshirts-data.jpg" alt="Who Move Different Banner" class="banner-img">
+      <div class="banner-content banner-content-center">
+        <div class="banner-text-small">FOR THE ONES</div>
+        <div class="banner-text-large">WHO MOVE DIFFERENT</div>
+        <div class="banner-text-shop">SHOP NOW</div>
+      </div>
+    </div>
+
+    <div class="main-container">
+      <section class="products-carousel-section">
+        <div class="products-carousel-tabs">
+          <button class="carousel-tab active" data-category="essentials">Essentials</button>
+          <button class="carousel-tab" data-category="tshirts">T-shirts</button>
+          <button class="carousel-tab" data-category="shorts">Shorts</button>
+        </div>
+        <div class="products-carousel" id="productsCarousel">
+          <!-- JS will insert product cards here -->
+        </div>
+        <div class="products-carousel-footer">
+          <button class="view-more-btn">View More</button>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer>
+    <div class="footer-content">
+      <section class="subscribe scroll-animate from-bottom stagger-1">
+        <h3>Join our mailing list</h3>
+        <form>
+          <input type="email" placeholder="Your Email" required>
+          <button type="submit">Subscribe</button>
+        </form>
+        <p class="terms">By continuing, you agree to our <a href="#">Terms Of Use</a> and <a href="#">Privacy & Cookie
+            Policy</a>.</p>
+      </section>
+
+      <div class="footer-sections">
+        <div class="footer-section">
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="pages/tshirts.html">T-shirts</a></li>
+            <li><a href="pages/shirts.html">Shirts</a></li>
+            <li><a href="pages/trousers.html">Trousers</a></li>
+            <li><a href="pages/shorts.html">Shorts</a></li>
+            <li><a href="pages/shoes.html">Shoes</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Shipping Info</a></li>
+            <li><a href="#">Return Policy</a></li>
+            <li><a href="#">Size Guide</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Affiliates</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Terms & Conditions</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Cookie Policy</a></li>
+            <li><a href="#">Accessibility</a></li>
+            <li><a href="#">Disclaimer</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <ul class="footer-links scroll-animate from-bottom stagger-2">
+        <li><a href="#">Shipping Info</a></li>
+        <li><a href="#">Terms & Conditions</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Return Policy</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <p class="scroll-animate from-bottom stagger-3">© 2025 Code Studios - ALL RIGHTS RESERVED</p>
+      <div class="social-links">
+        <a href="#" aria-label="Facebook">📘</a>
+        <a href="#" aria-label="Instagram">📷</a>
+        <a href="#" aria-label="Twitter">🐦</a>
+        <a href="#" aria-label="YouTube">📺</a>
+      </div>
+    </div>
+  </footer>
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12L12 3l9 9" />
+          <path d="M9 21V9h6v12" />
+        </svg>
+      </span>
+      <span class="bottom-nav-label">Home</span>
+    </a>
+    <a href="#" class="bottom-nav-link" onclick="showCart()">
+      <span class="bottom-nav-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+        </svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </span>
+      <span class="bottom-nav-label">Cart</span>
+    </a>
+    <a href="pages/profile.html" class="bottom-nav-link">
+      <span class="bottom-nav-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M2 21v-2a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v2" />
+        </svg>
+      </span>
+      <span class="bottom-nav-label">Me</span>
+    </a>
+  </nav>
+
+  <!-- Cart Modal -->
+  <div id="cartModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Корзина</h3>
+        <span class="close" onclick="closeCart()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div id="cartItems"></div>
+        <div class="cart-summary">
+          <div class="summary-item">
+            <span>Товаров:</span>
+            <span id="totalItems">0</span>
+          </div>
+          <div class="summary-item total">
+            <span>Итого:</span>
+            <span id="totalPrice">0 AED</span>
+          </div>
+          <button class="btn btn-primary btn-large" onclick="checkout()">
+            <i class="fas fa-credit-card"></i>
+            Оформить заказ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div id="notification" class="notification"></div>
+
+  <script src="script.js"></script>
+  <script>
+    // Bootstrap products cache for home carousel from backend if available
+    (function(){
+      fetch('api/products.php').then(r=>r.ok?r.json():null).then(data=>{
+        if (data && Array.isArray(data.items) && data.items.length) {
+          try { localStorage.setItem('products', JSON.stringify(data.items)); } catch {}
+        }
+      }).catch(()=>{});
+
+      // Categories dropdown toggle (desktop)
+      const categoriesBtn = document.getElementById('categoriesDropdown');
+      const categoriesContent = document.getElementById('categoriesDropdownContent');
+      if (categoriesBtn && categoriesContent) {
+        categoriesBtn.addEventListener('click', function(e){
+          e.stopPropagation();
+          categoriesContent.classList.toggle('show');
+          categoriesBtn.classList.toggle('active');
+          categoriesBtn.setAttribute('aria-expanded', categoriesContent.classList.contains('show'));
+        });
+        document.addEventListener('click', function(){
+          categoriesContent.classList.remove('show');
+          categoriesBtn.classList.remove('active');
+          categoriesBtn.setAttribute('aria-expanded', 'false');
+        });
+      }
+
+      // Desktop search toggle behavior like mobile
+      const desktopSearchToggle = document.getElementById('desktopSearchToggle');
+      const searchInput = document.getElementById('searchInputBox');
+      const searchSuggestions = document.getElementById('searchSuggestions');
+      if (desktopSearchToggle && searchInput) {
+        desktopSearchToggle.addEventListener('click', function(){
+          const visible = searchInput.style.display === 'block';
+          if (visible) {
+            searchInput.style.display = 'none';
+            if (searchSuggestions) { searchSuggestions.style.display = 'none'; searchSuggestions.innerHTML = ''; }
+          } else {
+            searchInput.style.display = 'block';
+            searchInput.value = '';
+            searchInput.focus();
+          }
+        });
+        document.addEventListener('click', function(e){
+          const wrap = document.querySelector('.search-box-wrap');
+          if (wrap && !wrap.contains(e.target)) {
+            searchInput.style.display = 'none';
+            if (searchSuggestions) { searchSuggestions.style.display = 'none'; searchSuggestions.innerHTML = ''; }
+          }
+        });
+      }
+    })();
+  </script>
+  <script>
+    // Cart and Favorites functionality
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+    function updateCartBadge() {
+      const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const cartBadge = document.getElementById('cartBadge');
+      if (cartBadge) {
+        cartBadge.textContent = cartCount;
+      }
+    }
+
+    function showCart() {
+      const modal = document.getElementById('cartModal');
+      const cartItems = document.getElementById('cartItems');
+      const totalItems = document.getElementById('totalItems');
+      const totalPrice = document.getElementById('totalPrice');
+
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p style="text-align: center; padding: 20px;">Корзина пуста</p>';
+      } else {
+        cartItems.innerHTML = cart.map(item => `
+            <div class="cart-item">
+              <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+              <div class="cart-item-info">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-price">${item.price} AED</div>
+                <div class="cart-item-quantity">
+                  <button class="quantity-btn" onclick="updateQuantity('${item.id}', -1)">-</button>
+                  <span>${item.quantity}</span>
+                  <button class="quantity-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
+                </div>
+              </div>
+            </div>
+          `).join('');
+      }
+
+      const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+      totalItems.textContent = totalCount;
+      totalPrice.textContent = totalAmount.toFixed(2) + ' AED';
+      modal.style.display = 'block';
+    }
+
+    function closeCart() {
+      const modal = document.getElementById('cartModal');
+      modal.style.display = 'none';
+    }
+
+    function updateQuantity(productId, change) {
+      const item = cart.find(item => item.id === productId);
+      if (item) {
+        item.quantity += change;
+        if (item.quantity <= 0) {
+          cart = cart.filter(item => item.id !== productId);
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartBadge();
+        showCart(); // Refresh cart display
+      }
+    }
+
+    function checkout() {
+      showNotification('Функция оформления заказа в разработке', 'info');
+      closeCart();
+    }
+
+    function showNotification(message, type = 'info') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.classList.add('show');
+
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function (event) {
+      const modal = document.getElementById('cartModal');
+      if (event.target === modal) {
+        closeCart();
+      }
+    }
+
+    // Initialize cart badge
+    updateCartBadge();
+
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+
+    function getTheme() {
+      return localStorage.getItem('theme') || 'light';
+    }
+
+    function setTheme(theme) {
+      localStorage.setItem('theme', theme);
+      if (theme === 'dark') {
+        body.classList.add('dark-theme');
+        themeToggle.innerHTML = '☀️ Light Mode';
+      } else {
+        body.classList.remove('dark-theme');
+        themeToggle.innerHTML = '🌙 Dark Mode';
+      }
+    }
+
+    // Initialize theme
+    setTheme(getTheme());
+
+    // Theme toggle event
+    if (themeToggle) {
+      themeToggle.addEventListener('click', function () {
+        const currentTheme = getTheme();
+        setTheme(currentTheme === 'light' ? 'dark' : 'light');
+      });
+    }
+
+    // Desktop theme toggle
+    const desktopThemeToggle = document.getElementById('desktopThemeToggle');
+    if (desktopThemeToggle) {
+      desktopThemeToggle.addEventListener('click', function () {
+        const currentTheme = getTheme();
+        setTheme(currentTheme === 'light' ? 'dark' : 'light');
+      });
+    }
+
+    // Sync theme toggle text
+    function updateThemeToggleText(theme) {
+      const text = theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+      if (themeToggle) themeToggle.innerHTML = text;
+      if (desktopThemeToggle) desktopThemeToggle.innerHTML = text;
+    }
+
+    // Update setTheme function to sync both toggles
+    const originalSetTheme = setTheme;
+    setTheme = function (theme) {
+      originalSetTheme(theme);
+      updateThemeToggleText(theme);
+    };
+
+    // Desktop dropdown functionality
+    const categoriesDropdown = document.getElementById('categoriesDropdown');
+    const categoriesDropdownContent = document.getElementById('categoriesDropdownContent');
+
+    if (categoriesDropdown && categoriesDropdownContent) {
+      categoriesDropdown.addEventListener('click', function (e) {
+        e.stopPropagation();
+        categoriesDropdownContent.classList.toggle('show');
+        categoriesDropdown.classList.toggle('active');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function () {
+        categoriesDropdownContent.classList.remove('show');
+        categoriesDropdown.classList.remove('active');
+      });
+    }
+
+    // PRODUCTS CAROUSEL
+    let allProducts = [];
+    let currentCategory = 'essentials';
+    function getProductsFromLocalStorage() {
+      const data = localStorage.getItem('products');
+      if (!data) return [];
+      try { return JSON.parse(data); } catch { return []; }
+    }
+    function renderProductsCarousel(category) {
+      const carousel = document.getElementById('productsCarousel');
+      if (!carousel) return;
+      let filtered = allProducts;
+      if (category !== 'essentials') {
+        filtered = allProducts.filter(p => p.category && p.category.toLowerCase().includes(category.replace('-', '')));
+      }
+      if (!filtered.length) {
+        carousel.innerHTML = '<div style="color:#888;padding:2em 1em;">No products found.</div>';
+        return;
+      }
+      carousel.innerHTML = filtered.map(product => `
+          <div class="product-card" onclick="openProductPage(event, '${product.id}')">
+            <img src="${(product.photos && product.photos[0]) ? product.photos[0] : (product.image || '')}" alt="${product.name || product.title}">
+            <div class="product-card-cart" onclick="addToCartFromCarousel(event, '${product.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </div>
+            <div class="product-card-title" title="${product.name || product.title}">${product.name || product.title}</div>
+            <div class="product-card-row">
+              ${product.discount ? `<span class='product-card-discount'>-${product.discount}%</span>` : ''}
+              <span class="product-card-price" style="${product.discount ? 'color:#e74c3c' : ''}">${product.price} AED</span>
+              ${product.oldPrice ? `<span class="product-card-oldprice">${product.oldPrice} AED</span>` : ''}
+            </div>
+            <div class="product-card-row">
+              <span class="product-card-rating">
+                <span class="star">★</span> ${product.rating ? product.rating : '4.8'}
+              </span>
+            </div>
+            <div class="product-card-colors">
+              ${(product.colors || []).map(color => {
+        if (typeof color === 'string') return `<span class=\"product-card-color\" style=\"background:${color}\"></span>`;
+        if (color.hex) return `<span class=\"product-card-color\" style=\"background:${color.hex}\"></span>`;
+        return '';
+      }).join('')}
+            </div>
+          </div>
+        `).join('');
+    }
+    function loadProductsCarousel() {
+      allProducts = getProductsFromLocalStorage();
+      renderProductsCarousel(currentCategory);
+    }
+    document.querySelectorAll('.carousel-tab').forEach(tab => {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('.carousel-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        currentCategory = this.dataset.category;
+        renderProductsCarousel(currentCategory);
+      });
+    });
+    function addToCartFromCarousel(event, productId) {
+      event.stopPropagation();
+      const products = allProducts;
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const cartItem = cart.find(item => item.id === productId);
+      if (cartItem) {
+        cartItem.quantity += 1;
+      } else {
+        cart.push({
+          id: productId,
+          name: product.name || product.title,
+          price: product.price,
+          image: (product.photos && product.photos[0]) ? product.photos[0] : (product.image || ''),
+          quantity: 1
+        });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartBadge && updateCartBadge();
+      showNotification('Товар добавлен в корзину!', 'success');
+    }
+    function openProductPage(event, productId) {
+      // Не переходить, если клик по иконке корзины
+      if (event.target.closest('.product-card-cart')) return;
+      window.location.href = `product.html?id=${productId}`;
+    }
+    // Инициализация при загрузке страницы
+    loadProductsCarousel();
+  </script>
+</body>
+
+</html>

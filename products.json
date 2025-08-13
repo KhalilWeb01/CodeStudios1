@@ -1,0 +1,90 @@
+[
+  {
+    "id": "hoodie-black",
+    "title": "Regular Fit Essential Overhead Hoodie",
+    "price": 84.55,
+    "oldPrice": 99.48,
+    "discount": 15,
+    "images": [
+      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80"
+    ],
+    "description": "100% Polyester. Secure Payment. Shipping Info. Return Policy.",
+    "colors": [
+      {"id": "black", "name": "Black", "hex": "#222", "discount": 15},
+      {"id": "gray", "name": "Gray", "hex": "#bfae9e", "discount": 5},
+      {"id": "red", "name": "Red", "hex": "#c0392b", "discount": 25}
+    ],
+    "sizes": [
+      {"name": "XS", "available": true},
+      {"name": "S", "available": true},
+      {"name": "M", "available": true},
+      {"name": "L", "available": true},
+      {"name": "XL", "available": true},
+      {"name": "XXL", "available": false}
+    ]
+  },
+  {
+    "id": "relaxed-fit",
+    "title": "Oversized Relaxed Fit Tee",
+    "price": 72.38,
+    "oldPrice": 76.19,
+    "discount": 5,
+    "images": [
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80"
+    ],
+    "description": "Soft cotton. Modern fit. Secure Payment. Shipping Info. Return Policy.",
+    "colors": [
+      {"id": "white", "name": "White", "hex": "#fff", "discount": 5},
+      {"id": "beige", "name": "Beige", "hex": "#bfae9e", "discount": 15},
+      {"id": "blue-gray", "name": "Blue Gray", "hex": "#a7b1b7", "discount": 15}
+    ],
+    "sizes": [
+      {"name": "S", "available": true},
+      {"name": "M", "available": true},
+      {"name": "L", "available": true},
+      {"name": "XL", "available": false}
+    ]
+  },
+  {
+    "id": "crop-fit-textured",
+    "title": "Crop Fit Textured Short Sleeve",
+    "price": 46.54,
+    "oldPrice": 46.54,
+    "discount": 0,
+    "images": [
+      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80"
+    ],
+    "description": "Textured fabric. Modern crop. Secure Payment. Shipping Info. Return Policy.",
+    "colors": [
+      {"id": "black", "name": "Black", "hex": "#222", "discount": 0},
+      {"id": "white", "name": "White", "hex": "#fff", "discount": 0}
+    ],
+    "sizes": [
+      {"name": "XS", "available": true},
+      {"name": "S", "available": true},
+      {"name": "M", "available": false},
+      {"name": "L", "available": true}
+    ]
+  },
+  {
+    "id": "crop-fit-heavyweight",
+    "title": "Crop Fit Premium Heavyweight",
+    "price": 41.88,
+    "oldPrice": 46.54,
+    "discount": 10,
+    "images": [
+      "https://images.unsplash.com/photo-1469398715555-76331a6c7c9b?auto=format&fit=crop&w=800&q=80"
+    ],
+    "description": "Premium heavyweight. Secure Payment. Shipping Info. Return Policy.",
+    "colors": [
+      {"id": "gray", "name": "Gray", "hex": "#eee", "discount": 10},
+      {"id": "beige", "name": "Beige", "hex": "#bfae9e", "discount": 5}
+    ],
+    "sizes": [
+      {"name": "S", "available": true},
+      {"name": "M", "available": true},
+      {"name": "L", "available": true},
+      {"name": "XL", "available": true}
+    ]
+  }
+] 

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Code Studios</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+         <nav class="navbar-flex">
+            <button class="menu-btn" id="openSidebar" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+            <!-- Mobile centered logo -->
+            <a href="index.html" class="mobile-logo" aria-label="Home">
+              <span class="logo-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 64 64">
+                  <path class="logo-arc-top" d="M 14 29 a 20 20 0 1 1 40 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="butt" />
+                  <path class="logo-arc-bottom" d="M 14 35 a 20.5 21 0 0 0  40 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="butt" />
+                  <line class="logo-vert" x1="32" y1="12" x2="32" y2="52" stroke="#fff" stroke-width="6" stroke-linecap="butt" />
+                  <line class="logo-horiz" x1="32" y1="32" x2="52" y2="32" stroke="#fff" stroke-width="6" stroke-linecap="butt" />
+                </svg>
+              </span>
+              <span class="mobile-brand-text">Code Studios</span>
+            </a>
+
+            <!-- Brand logo + name (desktop like in pages/tshirts.html) -->
+            <div class="brand-logo-wrap brand-logo-main" onclick="location.href='index.html'" style="cursor:pointer;">
+              <div class="logo">
+                <div class="logo-icon">
+                  <svg width="64" height="64" viewBox="0 0 64 64">
+                    <path class="logo-arc-top" d="M 14 29 a 20 20 0 1 1 40 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="butt" />
+                    <path class="logo-arc-bottom" d="M 14 35 a 20.5 21 0 0 0  40 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="butt" />
+                    <line class="logo-vert" x1="32" y1="12" x2="32" y2="52" stroke="#fff" stroke-width="6" stroke-linecap="butt" />
+                    <line class="logo-horiz" x1="32" y1="32" x2="52" y2="32" stroke="#fff" stroke-width="6" stroke-linecap="butt" />
+                  </svg>
+                </div>
+              </div>
+              <span class="brand-name">Code Studios</span>
+            </div>
+
+            <!-- Desktop Navigation Menu -->
+            <nav class="desktop-nav">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="nav-dropdown">
+                        <button class="nav-dropdown-btn" id="categoriesDropdown">
+                            Categories
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="nav-dropdown-content" id="categoriesDropdownContent">
+                            <a href="pages/tshirts.html">T-shirts</a>
+                            <a href="pages/shirts.html">Shirts</a>
+                            <a href="pages/trousers.html">Trousers</a>
+                            <a href="pages/shorts.html">Shorts</a>
+                            <a href="pages/shoes.html">Shoes</a>
+                        </div>
+                    </li>
+                    <li><a href="dashboard/dash.html">Dashboard</a></li>
+                    <li><a href="#" onclick="showCart()">Cart</a></li>
+                    <li><a href="pages/profile.html">Profile</a></li>
+                    <li>
+                        <button id="desktopThemeToggle" class="theme-toggle-btn">
+                            🌙 Dark Mode
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="search-box-wrap" style="position:relative;display:inline-block;">
+              <button class="search-btn" aria-label="Search">
+                <svg class="search-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="18" y1="18" x2="15.5" y2="15.5" />
+                </svg>
+              </button>
+              <input type="text" class="search-input-box" id="searchInputBox" placeholder="Search products..." style="display:none;">
+              <div class="search-suggestions" id="searchSuggestions" style="display:none;"></div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Sidebar для работы кнопки меню -->
+    <aside class="sidebar" id="sidebar">
+        <button class="close-btn" id="closeSidebar" aria-label="Close menu">&times;</button>
+        <ul class="sidebar-links">
+            <li><a href="../index.html">Home</a></li>
+            <li class="sidebar-dropdown">
+                <button class="sidebar-dropdown-btn" id="sidebarCategoriesDropdown">
+                    Categories
+                    <span class="dropdown-arrow">▼</span>
+                </button>
+                <div class="sidebar-dropdown-content" id="sidebarCategoriesDropdownContent">
+                    <a href="tshirts.html">T-shirts</a>
+                    <a href="shirts.html">Shirts</a>
+                    <a href="trousers.html">Trousers</a>
+                    <a href="shorts.html">Shorts</a>
+                    <a href="shoes.html">Shoes</a>
+                </div>
+            </li>
+            <!-- Dashboard hidden from sidebar -->
+            <li><a href="#">Cart</a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li class="theme-toggle">
+                <button id="themeToggle" style="background:none;border:none;color:inherit;font-size:1.2em;padding:0.5em 1em;display:block;width:100%;text-align:left;cursor:pointer;">
+                    🌙 Dark Mode
+                </button>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="main-container">
+            <!-- Profile Header -->
+            <div class="profile-header animate-from-top">
+                <div class="profile-avatar">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSIjNGE5MGUyIi8+CjxjaXJjbGUgY3g9IjYwIiBjeT0iNDAiIHI9IjIwIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTAgMTAwQzEwIDc4LjkwOTEgMjcuOTA5MSA2MSA0OSA2MUg3MUM5Mi4wOTA5IDYxIDExMCA3OC45MDkxIDExMCAxMDBWMTIwSDEwVjEwMFoiIGZpbGw9IndoaXRlIi8+Cjx0ZXh0IHg9IjYwIiB5PSIxMTAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkpEPC90ZXh0Pgo8L3N2Zz4K" alt="Аватар пользователя" id="userAvatar">
+                    <button class="avatar-edit">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+                <div class="profile-info">
+                    <h2 id="userName">Ivan Dmitriev</h2>
+                    <p id="userEmail">ivan.dmitriev@example.com</p>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <span class="stat-number" id="orderCount">12</span>
+                            <span class="stat-label">Orders</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="totalSpent">45,600 ₽</span>
+                            <span class="stat-label">Spent</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="loyaltyPoints">1,250</span>
+                            <span class="stat-label">Points</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-primary" id="editProfileBtn">
+                        <i class="fas fa-edit"></i>
+                        Edit
+                    </button>
+                    <button class="btn btn-secondary" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Profile Tabs -->
+            <div class="profile-tabs animate-from-left">
+                <button class="tab-btn active" data-tab="personal">
+                    <i class="fas fa-user"></i>
+                    Personal Data
+                </button>
+                <button class="tab-btn" data-tab="orders">
+                    <i class="fas fa-shopping-bag"></i>
+                    My Orders
+                </button>
+                <button class="tab-btn" data-tab="cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    Cart
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+                <button class="tab-btn" data-tab="favorites">
+                    <i class="fas fa-heart"></i>
+                    Favorites
+                </button>
+                <button class="tab-btn" data-tab="settings">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Personal Data Tab -->
+                <div class="tab-pane active" id="personal">
+                    <div class="personal-data animate-from-right">
+                        <h3>Personal Data</h3>
+                        <form class="profile-form" id="profileForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" value="Ivan" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" value="Dmitriev" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" value="ivan.dmitriev@example.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="tel" id="phone" value="+7 (999) 123-45-67" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="birthDate">Date of Birth</label>
+                                <input type="date" id="birthDate" value="1990-05-15">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Delivery Address</label>
+                                <textarea id="address" rows="3">Moscow, Tverskaya St., 1, apt. 15</textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Orders Tab -->
+                <div class="tab-pane" id="orders">
+                    <div class="orders-section animate-from-right">
+                        <h3>My Orders</h3>
+                        <div class="orders-list" id="ordersList">
+                            <!-- Order items will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cart Tab -->
+                <div class="tab-pane" id="cart">
+                    <div class="cart-section animate-from-right">
+                        <div class="cart-header">
+                            <h3>Cart</h3>
+                            <button class="btn btn-secondary" id="clearCartBtn">
+                                <i class="fas fa-trash"></i>
+                                Clear Cart
+                            </button>
+                        </div>
+                        <div class="cart-content">
+                            <div class="cart-items" id="cartItems">
+                                <!-- Cart items will be loaded here -->
+                            </div>
+                            <div class="cart-summary" id="cartSummary">
+                                <div class="summary-item">
+                                    <span>Items:</span>
+                                    <span id="totalItems">0</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span>Discount:</span>
+                                    <span id="discount">0 ₽</span>
+                                </div>
+                                <div class="summary-item total">
+                                    <span>Total:</span>
+                                    <span id="totalPrice">0 ₽</span>
+                                </div>
+                                <button class="btn btn-primary btn-large" id="checkoutBtn">
+                                    <i class="fas fa-credit-card"></i>
+                                    Checkout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Favorites Tab -->
+                <div class="tab-pane" id="favorites">
+                    <div class="favorites-section animate-from-right">
+                        <h3>Favorites</h3>
+                        <div class="favorites-grid" id="favoritesGrid">
+                            <!-- Favorite items will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div class="tab-pane" id="settings">
+                    <div class="settings-section animate-from-right">
+                        <h3>Settings</h3>
+                        <div class="settings-group">
+                            <h4>Notifications</h4>
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Email Notifications</span>
+                            </div>
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="smsNotifications">
+                                    <span class="slider"></span>
+                                </label>
+                                <span>SMS Notifications</span>
+                            </div>
+                        </div>
+                        <div class="settings-group">
+                            <h4>Security</h4>
+                            <button class="btn btn-secondary" id="changePasswordBtn">
+                                <i class="fas fa-key"></i>
+                                Change Password
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </main>
+    <footer>
+        <section class="subscribe">
+            <h3>Join our mailing list</h3>
+            <form>
+                <input type="email" placeholder="Your Email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+            <p class="terms">By continuing, you agree to our <a href="#">Terms Of Use</a> and <a href="#">Privacy & Cookie Policy</a>.</p>
+        </section>
+        <ul class="footer-links">
+            <li><a href="#">Shipping Info</a></li>
+            <li><a href="#">Terms & Conditions</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Return Policy</a></li>
+            <li><a href="#">Contact Us</a></li>
+        </ul>
+        <p>© 2025 Code Studios - ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="../index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 3l9 9"/><path d="M9 21V9h6v12"/></svg>
+            </span>
+            <span class="bottom-nav-label">Home</span>
+        </a>
+        <a href="#" class="bottom-nav-item" id="bottomCartLink">
+            <span class="bottom-nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </span>
+            <span class="bottom-nav-label">Cart</span>
+        </a>
+        <a href="profile.html" class="bottom-nav-item active">
+            <span class="bottom-nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v2"/></svg>
+            </span>
+            <span class="bottom-nav-label">Profile</span>
+        </a>
+    </nav>
+
+    <script src="../script.js"></script>
+    <script src="auth.js"></script>
+    <script src="profile.js"></script>
+    <script>
+        // Redirect to login if not authenticated
+        Auth && Auth.requireAuth('login.html');
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        function getTheme() {
+            return localStorage.getItem('theme') || 'light';
+        }
+        
+        function setTheme(theme) {
+            localStorage.setItem('theme', theme);
+            if (theme === 'dark') {
+                body.classList.add('dark-theme');
+                themeToggle.innerHTML = '☀️ Light Mode';
+            } else {
+                body.classList.remove('dark-theme');
+                themeToggle.innerHTML = '🌙 Dark Mode';
+            }
+        }
+        
+        // Initialize theme
+        setTheme(getTheme());
+        
+        // Theme toggle event
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = getTheme();
+                setTheme(currentTheme === 'light' ? 'dark' : 'light');
+            });
+        }
+    </script>
+</body>
+</html> 

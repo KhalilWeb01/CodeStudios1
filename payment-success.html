@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Success</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body style="display:flex;align-items:center;justify-content:center;min-height:70vh;font-family: 'Courier New', monospace;">
+  <div style="text-align:center;max-width:600px;padding:2rem;">
+    <h1>Спасибо! Оплата прошла успешно.</h1>
+    <p id="orderId"></p>
+    <a href="/pages/profile.html" class="btn btn-primary" style="display:inline-block;margin-top:1rem;padding:10px 20px;border:1px solid #222;border-radius:6px;text-decoration:none;">Вернуться в профиль</a>
+  </div>
+  <script>
+    const p = new URLSearchParams(location.search);
+    const oid = p.get('order_id');
+    if (oid) document.getElementById('orderId').textContent = 'Номер заказа: ' + oid;
+  </script>
+</body>
+</html>
+
+
