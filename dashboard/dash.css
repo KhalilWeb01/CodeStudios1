@@ -2041,6 +2041,7 @@ body {
 
 .btn-primary,
 .btn-secondary {
+  margin-bottom: 300px; ;
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 500;
